@@ -11,16 +11,18 @@ REFERENCE_ROOT = Path("reference/api")
 def _iter_public_modules() -> list[tuple[str, Path, Path]]:
     """Return import path, source path, and generated docs path tuples."""
     modules: list[tuple[str, Path, Path]] = []
-    for source_path in sorted(PACKAGE_ROOT.glob("*.py")):
+    for source_path in sorted(PACKAGE_ROOT.rglob("*.py")):
         if source_path.name.startswith("_") and source_path.name != "__init__.py":
             continue
 
         module_parts = source_path.relative_to("src").with_suffix("").parts
         import_path = ".".join(part for part in module_parts if part != "__init__")
-        if source_path.name == "__init__.py":
+        if import_path == "patiencepilot":
             docs_path = REFERENCE_ROOT / "index.md"
+        elif source_path.name == "__init__.py":
+            docs_path = REFERENCE_ROOT.joinpath(*source_path.relative_to(PACKAGE_ROOT).parent.parts) / "index.md"
         else:
-            docs_path = REFERENCE_ROOT / f"{source_path.stem}.md"
+            docs_path = REFERENCE_ROOT.joinpath(*source_path.relative_to(PACKAGE_ROOT).with_suffix(".md").parts)
         modules.append((import_path, source_path, docs_path))
     return modules
 

@@ -98,7 +98,15 @@ nav:
       - Reference overview: reference/index.md
       - API:
           - Package: reference/api/index.md
+          - Cards: reference/api/cards.md
+          - State: reference/api/state.md
+          - Moves: reference/api/moves.md
+          - Engine: reference/api/engine.md
           - Exceptions: reference/api/exceptions.md
           - Game: reference/api/game.md
+          - Variants:
+              - Variants package: reference/api/variants/index.md
+              - Variant base: reference/api/variants/base.md
+              - Klondike: reference/api/variants/klondike.md
       - Compatibility: reference/compatibility.md
       - Configuration and automation: reference/configuration.md
