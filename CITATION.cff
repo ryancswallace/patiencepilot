@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use solitaire in your work, please cite it using this metadata."
+title: "solitaire"
+abstract: >-
+  Solitaire solver.
+type: software
+authors:
+  - family-names: "Wallace"
+    given-names: "Ryan"
+    email: "ryancswallace@gmail.com"
+    alias: "ryancswallace"
+version: 0.1.0
+date-released: "2026-06-28"
+license: MIT
+repository-code: "https://github.com/ryancswallace/solitaire"
+url: "https://github.com/ryancswallace/solitaire"
+keywords:
+  - "python"
+  - "solitaire"
+  - "solver"
+  - "card-games"
+  - "game-theory"
+  - "combinatorial-optimization"
+  - "artificial-intelligence"
+  - "search-algorithms"

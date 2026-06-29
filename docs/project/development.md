@@ -1,0 +1,121 @@
+# Development
+
+Use this page for local setup, focused checks, and the test layout. For the full
+automation map, see [Configuration and automation](../reference/configuration.md).
+
+## Setup
+
+```bash
+make ready
+make hooks-install
+```
+
+Use uv for Python dependency management. Outside the devcontainer, install
+Node.js and npm so Markdown, spelling, and Dockerfile checks can run.
+
+## Daily loop
+
+```bash
+make format
+make check
+```
+
+Use focused commands while iterating:
+
+```bash
+make test
+make lint
+make typecheck
+make docs
+make markdownlint
+make spellcheck
+make workflow-lint
+make workflow-env-lint
+make docker-lint
+```
+
+`make check` is the authoritative local validation command. It checks the uv
+lockfile, Ruff, Markdown, Dockerfiles, GitHub Actions workflows and
+environments, spelling, secrets, Bandit, deptry, pip-audit, tests and coverage,
+minimum dependency versions, basedpyright, documentation links, built
+distributions, and CycloneDX SBOM generation.
+
+## Testing
+
+The default test command runs unit, property-based, integration, and packaging
+smoke tests with branch coverage enabled:
+
+```bash
+make test
+```
+
+Useful focused runs:
+
+```bash
+uv run pytest -m unit
+uv run pytest -m property
+uv run pytest -m integration
+uv run pytest -m "integration and slow"
+uv run pytest -m "not slow"
+```
+
+Markers:
+
+* `unit`: fast isolated tests for package behavior.
+* `property`: Hypothesis-based tests for invariants and generated inputs.
+* `integration`: tests that exercise installed packages or third-party runtime integrations.
+* `slow`: slower subprocess or packaging tests.
+
+## Multi-version checks
+
+Run the supported interpreter matrix before changes that may vary by Python
+version:
+
+```bash
+make test-matrix
+```
+
+Nox uses uv-backed environments and locked dependencies. Useful sessions:
+
+```bash
+uv run nox -s tests-3.11
+uv run nox --tags quality
+uv run nox --tags docs
+uv run nox -s release
+```
+
+## Documentation loop
+
+Edit files under `docs/`, then run:
+
+```bash
+make docs
+```
+
+`make docs` runs MkDocs in strict mode. It fails on broken navigation entries,
+broken internal links, missing anchors, and Markdown warnings. Before changing
+navigation or moving pages, use links relative to the current Markdown file so
+MkDocs can validate them during the build.
+
+Check the generated site links with:
+
+```bash
+make docs-linkcheck
+```
+
+Preview the site locally with:
+
+```bash
+make serve-docs
+```
+
+API reference pages under `reference/api/` are generated from package
+docstrings by `docs/_scripts/gen_api_reference.py`; do not create those pages by
+hand. Update public docstrings and exports when public behavior changes.
+
+## Working locations
+
+* `src/solitaire/`: package implementation.
+* `tests/`: unit, property, integration, and smoke tests.
+* `docs/`: MkDocs documentation source.
+* `reports/`, `site/`, `dist/`, `.nox/`: generated local artifacts that should not be committed.
