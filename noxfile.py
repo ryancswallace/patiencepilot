@@ -89,9 +89,9 @@ def release(session: nox.Session) -> None:
     session.run("twine", "check", *(str(artifact) for artifact in artifacts))
 
     wheel = next(dist_dir.glob("*.whl"))
-    session.install("--reinstall-package", "solitaire", str(wheel))
+    session.install("--reinstall-package", "patiencepilot", str(wheel))
     session.run(
         "python",
         "-c",
-        "from solitaire import __version__; print(__version__)",
+        "from patiencepilot import __version__; print(__version__)",
     )

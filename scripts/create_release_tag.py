@@ -30,7 +30,7 @@ def release_tag_plan(raw_version: str, base: str) -> ReleaseTagPlan:
         version=version,
         tag=f"v{version}",
         base=base,
-        message=f"solitaire {version}",
+        message=f"patiencepilot {version}",
     )
 
 
@@ -121,7 +121,7 @@ def parser() -> argparse.ArgumentParser:
     arg_parser.add_argument(
         "version",
         nargs="?",
-        help="Release version without a leading v. Defaults to SOLITAIRE_RELEASE_VERSION.",
+        help="Release version without a leading v. Defaults to PATIENCEPILOT_RELEASE_VERSION.",
     )
     arg_parser.add_argument("--base", default="main", help="Branch to tag after pulling with --ff-only.")
     arg_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Repository root to operate on.")

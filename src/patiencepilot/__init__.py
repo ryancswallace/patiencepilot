@@ -1,16 +1,16 @@
-"""Public solitaire API."""
+"""Public patiencepilot API."""
 
 from importlib.metadata import PackageNotFoundError, version
 
-from .exceptions import SolitaireError
+from .exceptions import PatiencePilotError
 
 try:
-    __version__ = version("solitaire")
+    __version__ = version("patiencepilot")
 except PackageNotFoundError:
     __version__ = "0.0.0+unknown"
 
 
 __all__ = [
-    "SolitaireError",
+    "PatiencePilotError",
     "__version__",
 ]

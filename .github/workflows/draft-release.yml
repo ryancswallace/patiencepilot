@@ -96,9 +96,9 @@ jobs:
           set -euo pipefail
           title="Release ${RELEASE_TAG}"
           assets=(
-            "dist/solitaire-${VERSION}.tar.gz"
-            "dist/solitaire-${VERSION}-py3-none-any.whl"
-            "dist/solitaire.cdx.json"
+            "dist/patiencepilot-${VERSION}.tar.gz"
+            "dist/patiencepilot-${VERSION}-py3-none-any.whl"
+            "dist/patiencepilot.cdx.json"
           )
 
           for asset in "${assets[@]}"; do
@@ -134,9 +134,9 @@ jobs:
         run: |
           set -euo pipefail
           expected_assets=(
-            "solitaire-${VERSION}.tar.gz"
-            "solitaire-${VERSION}-py3-none-any.whl"
-            "solitaire.cdx.json"
+            "patiencepilot-${VERSION}.tar.gz"
+            "patiencepilot-${VERSION}-py3-none-any.whl"
+            "patiencepilot.cdx.json"
           )
           asset_names="$(gh release view "$RELEASE_TAG" --json assets --jq '.assets[].name')"
 

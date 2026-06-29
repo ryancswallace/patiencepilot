@@ -31,10 +31,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUNTIME_IMAGE: ghcr.io/ryancswallace/solitaire
-  TEST_IMAGE: ghcr.io/ryancswallace/solitaire-test
-  LOCAL_RUNTIME_IMAGE: solitaire:ci
-  LOCAL_TEST_IMAGE: solitaire-test:ci
+  RUNTIME_IMAGE: ghcr.io/ryancswallace/patiencepilot
+  TEST_IMAGE: ghcr.io/ryancswallace/patiencepilot-test
+  LOCAL_RUNTIME_IMAGE: patiencepilot:ci
+  LOCAL_TEST_IMAGE: patiencepilot-test:ci
 
 jobs:
   docker:

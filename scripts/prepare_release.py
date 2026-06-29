@@ -180,12 +180,12 @@ def run_uv_lock(root: Path) -> None:
 
 
 def validate_release_version(raw_version: str | None) -> str:
-    """Return a valid SOLITAIRE_RELEASE_VERSION value."""
+    """Return a valid PATIENCEPILOT_RELEASE_VERSION value."""
     if not raw_version:
-        raise ReleaseError("Set SOLITAIRE_RELEASE_VERSION=X.Y.Z before running this release target.")
+        raise ReleaseError("Set PATIENCEPILOT_RELEASE_VERSION=X.Y.Z before running this release target.")
     match = RELEASE_VERSION_RE.match(raw_version.strip())
     if not match:
-        raise ReleaseError(f"SOLITAIRE_RELEASE_VERSION must be X.Y.Z without a leading v; got {raw_version!r}.")
+        raise ReleaseError(f"PATIENCEPILOT_RELEASE_VERSION must be X.Y.Z without a leading v; got {raw_version!r}.")
     return match.group("version")
 
 
@@ -194,7 +194,7 @@ def release_version_arg(cli_version: str | None) -> str:
     if cli_version is not None:
         return normalize_version(cli_version)
 
-    return validate_release_version(os.environ.get("SOLITAIRE_RELEASE_VERSION"))
+    return validate_release_version(os.environ.get("PATIENCEPILOT_RELEASE_VERSION"))
 
 
 def validate_version(args: argparse.Namespace) -> int:
@@ -252,8 +252,8 @@ def parser() -> argparse.ArgumentParser:
     validate_version_parser.add_argument(
         "version",
         nargs="?",
-        default=os.environ.get("SOLITAIRE_RELEASE_VERSION"),
-        help="Release version as X.Y.Z without a leading v. Defaults to SOLITAIRE_RELEASE_VERSION.",
+        default=os.environ.get("PATIENCEPILOT_RELEASE_VERSION"),
+        help="Release version as X.Y.Z without a leading v. Defaults to PATIENCEPILOT_RELEASE_VERSION.",
     )
     validate_version_parser.set_defaults(func=validate_version)
 

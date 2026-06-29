@@ -7,9 +7,9 @@ export PATH := $(HOME)/.local/bin:$(HOME)/.cargo/bin:$(PATH)
 
 DOCKER ?= docker
 DOCKER_SOCKET ?= /var/run/docker.sock
-IMAGE_NAME ?= ghcr.io/ryancswallace/solitaire
+IMAGE_NAME ?= ghcr.io/ryancswallace/patiencepilot
 IMAGE_TAG ?= local
-TEST_IMAGE_NAME ?= ghcr.io/ryancswallace/solitaire-test
+TEST_IMAGE_NAME ?= ghcr.io/ryancswallace/patiencepilot-test
 TRIVY_IMAGE ?= docker.io/aquasec/trivy:0.67.2
 LINKCHECK_REPORT ?= reports/linkchecker.xml
 MIN_DEPS_PYTHON ?= 3.11
@@ -18,9 +18,9 @@ PRECOMMIT_ARGS ?= --all-files
 PYTEST_ARGS ?= -q
 RUFF_ARGS ?= .
 NODE_MODULES_STAMP := node_modules/.package-lock.json
-SBOM_PATH ?= dist/solitaire.cdx.json
+SBOM_PATH ?= dist/patiencepilot.cdx.json
 UV_INSTALL_URL ?= https://astral.sh/uv/install.sh
-RELEASE_VERSION ?= $(SOLITAIRE_RELEASE_VERSION)
+RELEASE_VERSION ?= $(PATIENCEPILOT_RELEASE_VERSION)
 RELEASE_PR_BASE ?= main
 RELEASE_PR_FLAGS ?=
 RELEASE_TAG_BASE ?= main
@@ -94,9 +94,9 @@ help:
 	@echo "  audit                 Audit locked dependencies for known vulnerabilities"
 	@echo ""
 	@echo "Release artifacts:"
-	@echo "  release-version-check Validate SOLITAIRE_RELEASE_VERSION syntax"
+	@echo "  release-version-check Validate PATIENCEPILOT_RELEASE_VERSION syntax"
 	@echo "  release-preflight     Check release prerequisites before preparing a release"
-	@echo "  prepare-release       Update release metadata; set SOLITAIRE_RELEASE_VERSION=X.Y.Z"
+	@echo "  prepare-release       Update release metadata; set PATIENCEPILOT_RELEASE_VERSION=X.Y.Z"
 	@echo "  release-pr-ready      Prepare, validate, commit, push, and open the release PR"
 	@echo "  release-pr            Commit, push, and open the release pull request"
 	@echo "  release-tag           Create and push the annotated release tag"
@@ -348,12 +348,12 @@ smoke-dist: bootstrap
 	fi; \
 	uv venv --quiet "$$smoke_env" && \
 	VIRTUAL_ENV="$$smoke_env" uv pip install --quiet "$$wheel" && \
-	"$$smoke_env/bin/python" -c "from solitaire import __version__; print(__version__)"
+	"$$smoke_env/bin/python" -c "from patiencepilot import __version__; print(__version__)"
 
 validate-dist: bootstrap
 	@version=$$(uv version --short); \
-	expected_wheel="dist/solitaire-$$version-py3-none-any.whl"; \
-	expected_sdist="dist/solitaire-$$version.tar.gz"; \
+	expected_wheel="dist/patiencepilot-$$version-py3-none-any.whl"; \
+	expected_sdist="dist/patiencepilot-$$version.tar.gz"; \
 	expected_sbom="$(SBOM_PATH)"; \
 	status=0; \
 	for artifact in "$$expected_wheel" "$$expected_sdist" "$$expected_sbom"; do \
@@ -362,7 +362,7 @@ validate-dist: bootstrap
 			status=1; \
 		fi; \
 	done; \
-	unexpected=$$(find dist -maxdepth 1 -type f ! -name ".gitignore" ! -name "solitaire-$$version-py3-none-any.whl" ! -name "solitaire-$$version.tar.gz" ! -name "$$(basename "$(SBOM_PATH)")" | sort); \
+	unexpected=$$(find dist -maxdepth 1 -type f ! -name ".gitignore" ! -name "patiencepilot-$$version-py3-none-any.whl" ! -name "patiencepilot-$$version.tar.gz" ! -name "$$(basename "$(SBOM_PATH)")" | sort); \
 	if [ -n "$$unexpected" ]; then \
 		echo "Unexpected files in dist/:"; \
 		printf '%s\n' "$$unexpected"; \

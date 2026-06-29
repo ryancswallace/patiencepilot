@@ -1,11 +1,11 @@
-# solitaire documentation
+# patiencepilot documentation
 
-A solitaire solver in Python.
+A Solitaire solver in Python.
 
 Use this site by task type:
 
-* **Tutorials** teach the first complete solitaire workflow.
-* **How-to guides** solve focused tasks such as creating a solitaire game state.
+* **Tutorials** teach the first complete patiencepilot workflow.
+* **How-to guides** solve focused tasks such as creating a patiencepilot game state.
 * **Reference** records exact APIs, compatibility commitments, and automation
     commands.
 * **Explanation** describes architecture, policy, security posture, and design
@@ -18,11 +18,11 @@ Use this site by task type:
 ## Install
 
 ```bash
-uv add solitaire
+uv add patiencepilot
 ```
 
 If the project does not use uv, install it with pip instead:
 
 ```bash
-python -m pip install solitaire
+python -m pip install patiencepilot
 ```

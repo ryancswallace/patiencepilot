@@ -4,9 +4,9 @@
 # services are documented in docs/runbooks/repository-setup.md.
 
 repository:
-  description: "Solitaire solver in Python"
-  homepage: "https://ryancswallace.github.io/solitaire/"
-  topics: "artificial-intelligence, card-games, combinatorial-optimization, game-theory, python, search-algorithms, solitaire, solver"
+  description: "A Solitaire solver in Python"
+  homepage: "https://ryancswallace.github.io/patiencepilot/"
+  topics: "artificial-intelligence, card-games, combinatorial-optimization, freecell, game-theory, klondike, patience, python, search-algorithms, patiencepilot, solver"
   has_issues: true
   has_projects: false
   has_wiki: false

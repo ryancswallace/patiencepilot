@@ -14,8 +14,8 @@ documentation:
 api:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/solitaire/__init__.py"
-          - "src/solitaire/exceptions.py"
+          - "src/patiencepilot/__init__.py"
+          - "src/patiencepilot/exceptions.py"
 
 tests:
   - changed-files:
@@ -53,7 +53,7 @@ packaging:
   - changed-files:
       - any-glob-to-any-file:
           - "pyproject.toml"
-          - "src/solitaire/py.typed"
+          - "src/patiencepilot/py.typed"
           - "CITATION.cff"
           - "LICENSE"
           - "RELEASING.md"

@@ -64,7 +64,7 @@ jobs:
       - name: Upload package distributions
         uses: actions/upload-artifact@v7
         with:
-          name: solitaire-release-dist
+          name: patiencepilot-release-dist
           path: |
             dist/*.tar.gz
             dist/*.whl
@@ -74,7 +74,7 @@ jobs:
       - name: Upload release SBOM
         uses: actions/upload-artifact@v7
         with:
-          name: solitaire-release-sbom
+          name: patiencepilot-release-sbom
           path: dist/*.cdx.json
           if-no-files-found: error
           retention-days: 90
@@ -92,13 +92,13 @@ jobs:
       - name: Download package distributions
         uses: actions/download-artifact@v8
         with:
-          name: solitaire-release-dist
+          name: patiencepilot-release-dist
           path: dist
 
       - name: Download release SBOM
         uses: actions/download-artifact@v8
         with:
-          name: solitaire-release-sbom
+          name: patiencepilot-release-sbom
           path: dist
 
       - name: Upload assets to GitHub Release
@@ -123,13 +123,13 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/project/solitaire/
+      url: https://pypi.org/project/patiencepilot/
 
     steps:
       - name: Download release artifacts
         uses: actions/download-artifact@v8
         with:
-          name: solitaire-release-dist
+          name: patiencepilot-release-dist
           path: dist
 
       - name: Publish package distributions to PyPI
@@ -186,13 +186,13 @@ jobs:
           trap 'rm -rf "$verify_env"' EXIT
           uv venv --quiet "$verify_env"
           for attempt in $(seq 1 20); do
-            if VIRTUAL_ENV="$verify_env" uv pip install --quiet "solitaire==$VERSION"; then
+            if VIRTUAL_ENV="$verify_env" uv pip install --quiet "patiencepilot==$VERSION"; then
               break
             fi
             if [ "$attempt" -eq 20 ]; then
-              echo "Failed to install solitaire==$VERSION from PyPI after $attempt attempts."
+              echo "Failed to install patiencepilot==$VERSION from PyPI after $attempt attempts."
               exit 1
             fi
             sleep 30
           done
-          "$verify_env/bin/python" -c "from solitaire import __version__; print(__version__)"
+          "$verify_env/bin/python" -c "from patiencepilot import __version__; print(__version__)"

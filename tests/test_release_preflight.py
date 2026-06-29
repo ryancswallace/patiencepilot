@@ -69,10 +69,10 @@ def test_release_version_arg_validates_env_version(monkeypatch: pytest.MonkeyPat
 
     assert release_preflight.release_version_arg("v1.2.3") == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "1.2.3")
     assert release_preflight.release_version_arg(None) == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "v1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "v1.2.3")
     with pytest.raises(release_preflight.ReleaseError, match="without a leading v"):
         release_preflight.release_version_arg(None)
 

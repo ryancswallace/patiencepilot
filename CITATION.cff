@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use solitaire in your work, please cite it using this metadata."
-title: "solitaire"
+message: "If you use patiencepilot in your work, please cite it using this metadata."
+title: "patiencepilot"
 abstract: >-
-  Solitaire solver.
+  A Solitaire solver in Python.
 type: software
 authors:
   - family-names: "Wallace"
@@ -12,13 +12,16 @@ authors:
 version: 0.1.0
 date-released: "2026-06-28"
 license: MIT
-repository-code: "https://github.com/ryancswallace/solitaire"
-url: "https://github.com/ryancswallace/solitaire"
+repository-code: "https://github.com/ryancswallace/patiencepilot"
+url: "https://github.com/ryancswallace/patiencepilot"
 keywords:
   - "artificial-intelligence"
   - "card-games"
   - "combinatorial-optimization"
+  - "freecell"
   - "game-theory"
+  - "klondike"
+  - "patience"
   - "python"
   - "search-algorithms"
   - "solitaire"

@@ -1,13 +1,13 @@
-# solitaire project instructions
+# patiencepilot project instructions
 
 ## Project
 
-This repository contains `solitaire`, a Solitaire solver in Python.
+This repository contains `patiencepilot`, a Solitaire solver in Python.
 
 ## Package layout
 
-- `src/solitaire/__init__.py`: public package exports
-- `src/solitaire/exceptions.py`: package-specific exceptions
+- `src/patiencepilot/__init__.py`: public package exports
+- `src/patiencepilot/exceptions.py`: package-specific exceptions
 - `tests/`: tests
 
 ## Tooling
@@ -55,4 +55,4 @@ make check
 
 ## API constraints
 
-- Preserve the public API exported from `solitaire.__init__` unless explicitly asked to change it or required to resolve an issue most cleanly.
+- Preserve the public API exported from `patiencepilot.__init__` unless explicitly asked to change it or required to resolve an issue most cleanly.

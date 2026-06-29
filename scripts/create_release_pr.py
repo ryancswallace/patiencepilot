@@ -32,9 +32,9 @@ def release_pr_plan(raw_version: str, base: str) -> ReleasePrPlan:
     version = normalize_version(raw_version)
     branch = f"release/v{version}"
     title = f"Release {version}"
-    commit_message = f"Prepare solitaire {version} release"
+    commit_message = f"Prepare patiencepilot {version} release"
     body = f"""## Summary
-- Prepare solitaire {version} release metadata and changelog.
+- Prepare patiencepilot {version} release metadata and changelog.
 - Validate the release artifact set through `make check`.
 
 ## Verification
@@ -211,7 +211,7 @@ def parser() -> argparse.ArgumentParser:
     arg_parser.add_argument(
         "version",
         nargs="?",
-        help="Release version without a leading v. Defaults to SOLITAIRE_RELEASE_VERSION.",
+        help="Release version without a leading v. Defaults to PATIENCEPILOT_RELEASE_VERSION.",
     )
     arg_parser.add_argument("--base", default="main", help="Pull request base branch.")
     arg_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Repository root to operate on.")

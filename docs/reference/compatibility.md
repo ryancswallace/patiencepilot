@@ -1,11 +1,11 @@
 # Compatibility
 
-This page defines the support surface for solitaire. It should agree with
+This page defines the support surface for patiencepilot. It should agree with
 `pyproject.toml`, CI, nox, release notes, and the security policy.
 
 ## Supported Python versions
 
-solitaire supports CPython 3.11 through 3.14. The package metadata declares:
+patiencepilot supports CPython 3.11 through 3.14. The package metadata declares:
 
 ```toml
 requires-python = ">=3.11,<3.15"
@@ -36,14 +36,14 @@ Supported operating systems are:
 
 Pull request CI runs the full supported-Python test matrix on Ubuntu and a
 current-Python smoke test on macOS and Windows. Linux is the primary continuously
-verified platform. macOS and Windows are supported by design because solitaire
+verified platform. macOS and Windows are supported by design because patiencepilot
 does not rely on platform-specific APIs, but regressions that only appear on
 those systems may require a maintainer or contributor with access to the
 affected platform to confirm and validate the fix.
 
 ## Supported architectures
 
-solitaire is pure Python and does not ship compiled extensions. No
+patiencepilot is pure Python and does not ship compiled extensions. No
 architecture-specific behavior is part of the public contract.
 
 Supported architectures are any architecture where a supported CPython version
@@ -52,7 +52,7 @@ and the runtime dependencies can be installed, including common `x86_64` and
 
 ## Public API stability
 
-The stable public API is the set of names exported from `solitaire.__init__`
+The stable public API is the set of names exported from `patiencepilot.__init__`
 and documented in the generated API reference. Private modules and private names
 are not stable extension points, including:
 
@@ -80,7 +80,7 @@ release notes.
 
 ## Security-fix policy
 
-Security fixes are provided for the latest released version of solitaire. While
+Security fixes are provided for the latest released version of patiencepilot. While
 the project is pre-1.0, fixes are not routinely backported to older minor
 versions.
 

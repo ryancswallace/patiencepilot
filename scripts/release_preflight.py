@@ -162,7 +162,7 @@ def parser() -> argparse.ArgumentParser:
     arg_parser.add_argument(
         "version",
         nargs="?",
-        help="Release version without a leading v. Defaults to SOLITAIRE_RELEASE_VERSION.",
+        help="Release version without a leading v. Defaults to PATIENCEPILOT_RELEASE_VERSION.",
     )
     arg_parser.add_argument("--base", default="main", help="Release base branch.")
     arg_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Repository root to operate on.")

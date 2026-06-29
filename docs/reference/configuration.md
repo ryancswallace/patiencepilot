@@ -49,7 +49,7 @@ package docstrings during the build.
 MkDocs is configured to treat documentation warnings as failures. Navigation
 entries, local links, anchors, and generated API reference pages must stay in
 sync with the source tree. The local development server also watches
-`src/solitaire/` so docstring changes can refresh generated reference pages.
+`src/patiencepilot/` so docstring changes can refresh generated reference pages.
 
 Spelling checks include regular repository files and hidden GitHub configuration
 under `.github/`, so issue templates, workflow names, and pull request template

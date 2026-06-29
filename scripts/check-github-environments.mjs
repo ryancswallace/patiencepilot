@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import {execFileSync} from "node:child_process";
-import {readdir, readFile} from "node:fs/promises";
-import path from "node:path";
 import yaml from "js-yaml";
+import { execFileSync } from "node:child_process";
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
 
 const WORKFLOW_DIR = ".github/workflows";
 const API_VERSION = "2022-11-28";
@@ -126,7 +126,7 @@ async function fetchGitHubEnvironments(repository) {
     const headers = {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": API_VERSION,
-        "User-Agent": "solitaire-workflow-env-lint",
+        "User-Agent": "patiencepilot-workflow-env-lint",
     };
     if (token) {
         headers.Authorization = `Bearer ${token}`;

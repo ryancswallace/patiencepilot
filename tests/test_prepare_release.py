@@ -18,7 +18,7 @@ def _write_release_files(root: Path) -> None:
         textwrap.dedent(
             """
             [project]
-            name = "solitaire"
+            name = "patiencepilot"
             version = "0.1.0"
             description = "A package."
             """
@@ -30,7 +30,7 @@ def _write_release_files(root: Path) -> None:
             """
             cff-version: 1.2.0
             message: Cite this package.
-            title: solitaire
+            title: patiencepilot
             version: 0.1.0
             date-released: "2026-06-01"
             """
@@ -103,7 +103,7 @@ def test_validate_release_version_requires_env_style_version() -> None:
 
     assert release.validate_release_version("1.2.3") == "1.2.3"
 
-    with pytest.raises(release.ReleaseError, match="Set SOLITAIRE_RELEASE_VERSION"):
+    with pytest.raises(release.ReleaseError, match="Set PATIENCEPILOT_RELEASE_VERSION"):
         release.validate_release_version("")
 
     with pytest.raises(release.ReleaseError, match="without a leading v"):
@@ -118,10 +118,10 @@ def test_release_version_arg_accepts_cli_or_env_version(monkeypatch: pytest.Monk
 
     assert release.release_version_arg("v1.2.3") == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "1.2.3")
     assert release.release_version_arg(None) == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "v1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "v1.2.3")
     with pytest.raises(release.ReleaseError, match="without a leading v"):
         release.release_version_arg(None)
 
@@ -131,7 +131,7 @@ def test_validate_version_cli_reports_missing_or_malformed_versions(capsys: pyte
 
     assert release.main(["validate-version", ""]) == 1
     missing = capsys.readouterr()
-    assert "Set SOLITAIRE_RELEASE_VERSION=X.Y.Z" in missing.err
+    assert "Set PATIENCEPILOT_RELEASE_VERSION=X.Y.Z" in missing.err
 
     assert release.main(["validate-version", "v1.2.3"]) == 1
     malformed = capsys.readouterr()

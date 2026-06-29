@@ -1,4 +1,4 @@
-# Contributing to solitaire
+# Contributing to patiencepilot
 
 Thanks for considering a contribution.
 

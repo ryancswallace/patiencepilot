@@ -1,5 +1,5 @@
 {
-    "name": "solitaire-dev",
+    "name": "patiencepilot-dev",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {

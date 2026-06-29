@@ -115,7 +115,7 @@ hand. Update public docstrings and exports when public behavior changes.
 
 ## Working locations
 
-* `src/solitaire/`: package implementation.
+* `src/patiencepilot/`: package implementation.
 * `tests/`: unit, property, integration, and smoke tests.
 * `docs/`: MkDocs documentation source.
 * `reports/`, `site/`, `dist/`, `.nox/`: generated local artifacts that should not be committed.

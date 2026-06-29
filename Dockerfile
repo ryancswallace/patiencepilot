@@ -19,9 +19,9 @@ ENV PATH="/app/.venv/bin:/usr/local/bin:${PATH}" \
 
 WORKDIR /app
 
-RUN groupadd --gid "${APP_GID}" solitaire \
-    && useradd --uid "${APP_UID}" --gid solitaire --home-dir /app --shell /usr/sbin/nologin solitaire \
-    && chown solitaire:solitaire /app
+RUN groupadd --gid "${APP_GID}" patiencepilot \
+    && useradd --uid "${APP_UID}" --gid patiencepilot --home-dir /app --shell /usr/sbin/nologin patiencepilot \
+    && chown patiencepilot:patiencepilot /app
 
 FROM python-base AS builder
 
@@ -34,16 +34,16 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 FROM python-base AS runtime
 
-LABEL org.opencontainers.image.source="https://github.com/ryancswallace/solitaire" \
+LABEL org.opencontainers.image.source="https://github.com/ryancswallace/patiencepilot" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.description="Python solitaire solver."
+      org.opencontainers.image.description="A Solitaire solver in Python."
 
-COPY --from=builder --chown=solitaire:solitaire /app/.venv /app/.venv
-COPY --chown=solitaire:solitaire README.md LICENSE ./
+COPY --from=builder --chown=patiencepilot:patiencepilot /app/.venv /app/.venv
+COPY --chown=patiencepilot:patiencepilot README.md LICENSE ./
 
-USER solitaire
+USER patiencepilot
 
-CMD ["python", "-c", "from solitaire import __version__; print(__version__)"]
+CMD ["python", "-c", "from patiencepilot import __version__; print(__version__)"]
 
 FROM builder AS test
 
@@ -51,8 +51,8 @@ COPY . .
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked \
-    && chown -R solitaire:solitaire /app
+    && chown -R patiencepilot:patiencepilot /app
 
-USER solitaire
+USER patiencepilot
 
 CMD ["python", "-m", "pytest", "-q"]

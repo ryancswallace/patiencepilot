@@ -65,13 +65,13 @@ jobs:
           trap 'rm -rf "$verify_env"' EXIT
           uv venv --quiet "$verify_env"
           for attempt in $(seq 1 20); do
-            if VIRTUAL_ENV="$verify_env" uv pip install --quiet "solitaire==$VERSION"; then
+            if VIRTUAL_ENV="$verify_env" uv pip install --quiet "patiencepilot==$VERSION"; then
               break
             fi
             if [ "$attempt" -eq 20 ]; then
-              echo "Failed to install solitaire==$VERSION from PyPI after $attempt attempts."
+              echo "Failed to install patiencepilot==$VERSION from PyPI after $attempt attempts."
               exit 1
             fi
             sleep 30
           done
-          "$verify_env/bin/python" -c "from solitaire import __version__; print(__version__)"
+          "$verify_env/bin/python" -c "from patiencepilot import __version__; print(__version__)"

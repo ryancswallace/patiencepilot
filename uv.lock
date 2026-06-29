@@ -1986,7 +1986,7 @@ wheels = [
 ]
 
 [[package]]
-name = "solitaire"
+name = "patiencepilot"
 version = "0.1.0"
 source = { editable = "." }
 

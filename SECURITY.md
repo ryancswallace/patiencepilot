@@ -17,7 +17,7 @@ allow a reasonable period for a fix before publishing details.
 
 ## Support scope
 
-Security fixes are provided for the latest released version of solitaire.
+Security fixes are provided for the latest released version of patiencepilot.
 Because the project is currently pre-1.0, older minor versions are not routinely
 backported. Security and compatibility fixes are normally prepared on `main` and
 released from there.

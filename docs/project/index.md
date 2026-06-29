@@ -1,6 +1,6 @@
 # Project
 
-Project pages cover day-to-day work around solitaire: local development,
+Project pages cover day-to-day work around patiencepilot: local development,
 contribution expectations, and release-note maintenance.
 
 ## Available project pages

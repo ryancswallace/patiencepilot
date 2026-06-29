@@ -1,12 +1,12 @@
 # Release policy
 
-solitaire uses [Semantic Versioning](https://semver.org/). The detailed
+patiencepilot uses [Semantic Versioning](https://semver.org/). The detailed
 release checklist lives in [the release runbook](docs/runbooks/release.md), and
 the publishing model is documented in [Publishing](docs/explanation/publishing.md).
 
 ## Compatibility summary
 
-solitaire is currently pre-1.0:
+patiencepilot is currently pre-1.0:
 
 * patch releases should preserve documented public behavior except for urgent
   security or correctness fixes;
@@ -16,7 +16,7 @@ solitaire is currently pre-1.0:
 
 Starting with 1.0, incompatible changes to the stable public API require a major
 release. The stable public API is the set of names exported from
-`solitaire.__init__` and documented in the generated API reference; private
+`patiencepilot.__init__` and documented in the generated API reference; private
 modules and private names are not stable extension points.
 
 For the full policy, see [Compatibility](docs/reference/compatibility.md),

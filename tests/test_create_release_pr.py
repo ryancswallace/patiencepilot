@@ -19,9 +19,9 @@ def test_release_pr_plan_uses_standard_release_metadata() -> None:
     assert plan.version == "1.2.3"
     assert plan.branch == "release/v1.2.3"
     assert plan.base == "main"
-    assert plan.commit_message == "Prepare solitaire 1.2.3 release"
+    assert plan.commit_message == "Prepare patiencepilot 1.2.3 release"
     assert plan.title == "Release 1.2.3"
-    assert "Prepare solitaire 1.2.3 release metadata" in plan.body
+    assert "Prepare patiencepilot 1.2.3 release metadata" in plan.body
     assert "`make check`" in plan.body
 
 
@@ -47,15 +47,15 @@ def test_release_version_arg_validates_env_version(monkeypatch: pytest.MonkeyPat
 
     assert release_pr.release_version_arg("v1.2.3") == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "1.2.3")
     assert release_pr.release_version_arg(None) == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "v1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "v1.2.3")
     with pytest.raises(release_pr.ReleaseError, match="without a leading v"):
         release_pr.release_version_arg(None)
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "")
-    with pytest.raises(release_pr.ReleaseError, match="Set SOLITAIRE_RELEASE_VERSION"):
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "")
+    with pytest.raises(release_pr.ReleaseError, match="Set PATIENCEPILOT_RELEASE_VERSION"):
         release_pr.release_version_arg(None)
 
 

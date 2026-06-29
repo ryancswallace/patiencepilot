@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-import solitaire
+import patiencepilot
 
 pytestmark = pytest.mark.unit
 
@@ -12,15 +12,15 @@ pytestmark = pytest.mark.unit
 def test_public_api_exports_expected_names() -> None:
     expected_exports = {
         "__version__",
-        "SolitaireError",
+        "PatiencePilotError",
     }
 
-    assert set(solitaire.__all__) == expected_exports
+    assert set(patiencepilot.__all__) == expected_exports
 
-    for name in solitaire.__all__:
-        assert hasattr(solitaire, name)
+    for name in patiencepilot.__all__:
+        assert hasattr(patiencepilot, name)
 
 
 def test_package_version_is_resolved() -> None:
-    assert solitaire.__version__
-    assert "unknown" not in solitaire.__version__
+    assert patiencepilot.__version__
+    assert "unknown" not in patiencepilot.__version__

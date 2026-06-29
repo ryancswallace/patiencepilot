@@ -20,7 +20,7 @@ def test_release_tag_plan_uses_standard_tag_metadata() -> None:
     assert plan.version == "1.2.3"
     assert plan.tag == "v1.2.3"
     assert plan.base == "main"
-    assert plan.message == "solitaire 1.2.3"
+    assert plan.message == "patiencepilot 1.2.3"
 
 
 def test_create_release_tag_pulls_validates_tags_and_pushes(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -43,7 +43,7 @@ def test_create_release_tag_pulls_validates_tags_and_pushes(monkeypatch: pytest.
 
     assert commands == [
         ["git", "pull", "--ff-only", "origin", "main"],
-        ["git", "tag", "-a", "v1.2.3", "-m", "solitaire 1.2.3"],
+        ["git", "tag", "-a", "v1.2.3", "-m", "patiencepilot 1.2.3"],
         ["git", "push", "origin", "v1.2.3"],
     ]
 
@@ -53,10 +53,10 @@ def test_release_version_arg_validates_env_version(monkeypatch: pytest.MonkeyPat
 
     assert release_tag.release_version_arg("v1.2.3") == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "1.2.3")
     assert release_tag.release_version_arg(None) == "1.2.3"
 
-    monkeypatch.setenv("SOLITAIRE_RELEASE_VERSION", "v1.2.3")
+    monkeypatch.setenv("PATIENCEPILOT_RELEASE_VERSION", "v1.2.3")
     with pytest.raises(release_tag.ReleaseError, match="without a leading v"):
         release_tag.release_version_arg(None)
 

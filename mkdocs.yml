@@ -1,9 +1,9 @@
-site_name: solitaire
-site_description: Solitaire solver in Python
+site_name: patiencepilot
+site_description: A Solitaire solver in Python
 site_author: Ryan Wallace
-site_url: https://ryancswallace.github.io/solitaire/
-repo_name: ryancswallace/solitaire
-repo_url: https://github.com/ryancswallace/solitaire
+site_url: https://ryancswallace.github.io/patiencepilot/
+repo_name: ryancswallace/patiencepilot
+repo_url: https://github.com/ryancswallace/patiencepilot
 edit_uri: blob/main/docs/
 
 docs_dir: docs
@@ -11,7 +11,7 @@ site_dir: site
 strict: true
 
 watch:
-  - src/solitaire
+  - src/patiencepilot
 
 validation:
   nav:
