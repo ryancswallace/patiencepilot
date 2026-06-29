@@ -6,7 +6,7 @@
 repository:
   description: "Solitaire solver in Python"
   homepage: "https://ryancswallace.github.io/solitaire/"
-  topics: "python, solitaire, solver, card-games, game-theory, combinatorial-optimization, artificial-intelligence, search-algorithms"
+  topics: "artificial-intelligence, card-games, combinatorial-optimization, game-theory, python, search-algorithms, solitaire, solver"
   has_issues: true
   has_projects: false
   has_wiki: false

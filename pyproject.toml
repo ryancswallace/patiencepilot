@@ -12,20 +12,21 @@ maintainers = [
     { name = "Ryan Wallace", email = "ryancswallace@gmail.com" },
 ]
 keywords = [
+    "artificial-intelligence",
+    "card-games",
+    "combinatorial-optimization",
+    "game-theory",
     "python",
+    "search-algorithms",
     "solitaire",
     "solver",
-    "card-games",
-    "game-theory",
-    "combinatorial-optimization",
-    "artificial-intelligence",
-    "search-algorithms"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Framework :: Pytest",
     "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
@@ -33,7 +34,8 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Games/Entertainment :: Puzzle Games",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Typing :: Typed",
 ]
 dependencies = [
