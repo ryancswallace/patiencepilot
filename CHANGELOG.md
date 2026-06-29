@@ -19,3 +19,7 @@ additional pre-1.0 compatibility expectations described in
 ### Fixed
 
 ### Security
+
+## 0.1.0 - 2026-06-29
+
+Initial test release
