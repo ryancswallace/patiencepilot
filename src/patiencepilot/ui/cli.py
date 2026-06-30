@@ -15,7 +15,7 @@ from patiencepilot.exceptions import PatiencePilotError
 from patiencepilot.game import GameSession
 from patiencepilot.moves import DrewStockCards, MovedCards, MoveEffect, RecycledWaste, RevealedTableauCard
 from patiencepilot.notation import move_from_id, move_to_id, state_from_text, state_to_text
-from patiencepilot.solvers import Advice, DummySolver, SearchLimit
+from patiencepilot.solvers import Advice, SearchLimit
 from patiencepilot.variants.base import Seed
 
 
@@ -87,6 +87,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     advice_parser = subparsers.add_parser("advice", help="Ask the configured advice provider for a move.")
     _add_source_args(advice_parser)
+    advice_parser.add_argument("--solver", default="dummy", metavar="NAME", help="Registered solver name or alias.")
     advice_parser.add_argument("--time-limit", type=float, metavar="SECONDS", help="Optional solver time limit.")
     advice_parser.add_argument("--node-limit", type=int, metavar="NODES", help="Optional solver node limit.")
     advice_parser.add_argument("--depth-limit", type=int, metavar="DEPTH", help="Optional solver depth limit.")
@@ -187,7 +188,8 @@ def _command_undo(args: argparse.Namespace, stdin: TextIO, stdout: TextIO, stder
 def _command_advice(args: argparse.Namespace, stdin: TextIO, stdout: TextIO) -> int:
     """Ask the configured advice provider for move advice."""
     app = _load_app(args, stdin)
-    advice = app.request_advice(provider=DummySolver(), limit=_search_limit_from_args(args))
+    app.select_solver(_str_arg(args, "solver"))
+    advice = app.request_advice(limit=_search_limit_from_args(args))
     _print_advice(advice, stdout)
     return 0
 

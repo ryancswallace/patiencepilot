@@ -105,6 +105,14 @@ def test_tui_options_parse_paths_seed_and_redeals(tmp_path: Path) -> None:
             "--save",
             str(save_path),
             "--real-world",
+            "--solver",
+            "trivial",
+            "--advice-time-limit",
+            "0.25",
+            "--advice-node-limit",
+            "10",
+            "--advice-depth-limit",
+            "2",
         ]
     )
 
@@ -116,6 +124,10 @@ def test_tui_options_parse_paths_seed_and_redeals(tmp_path: Path) -> None:
     assert options.load_path == load_path
     assert options.save_path == save_path
     assert options.real_world is True
+    assert options.solver == "trivial"
+    assert options.advice_time_limit == 0.25
+    assert options.advice_node_limit == 10
+    assert options.advice_depth_limit == 2
     assert tui._parse_redeals("2") == 2
     with pytest.raises(ValueError, match="invalid literal"):
         tui._parse_redeals("many")
@@ -410,7 +422,13 @@ def test_tui_real_world_advice_uses_known_view() -> None:
     async def scenario() -> None:
         service = PatiencePilotApp()
         service.advice_provider = RecordingAdviceProvider()
-        app = tui.PatiencePilotTui(tui.TuiOptions(real_world=True), app_service=service)
+        options = tui.TuiOptions(
+            real_world=True,
+            advice_time_limit=0.2,
+            advice_node_limit=5,
+            advice_depth_limit=3,
+        )
+        app = tui.PatiencePilotTui(options, app_service=service)
         async with app.run_test(size=(110, 40)) as pilot:
             await _finish_real_world_setup(app, pilot)
             app._request_advice()
@@ -419,6 +437,7 @@ def test_tui_real_world_advice_uses_known_view() -> None:
             assert isinstance(provider, RecordingAdviceProvider)
             assert app._known_session is not None
             assert provider.seen_view is app._known_session.view
+            assert provider.seen_limit == SearchLimit(time_seconds=0.2, node_limit=5, depth_limit=3)
             assert app.query_one("#move-input", Input).value == "DRAW"
 
     asyncio.run(scenario())
@@ -617,6 +636,9 @@ def test_tui_mounted_app_reports_errors_and_advice_status(tmp_path: Path) -> Non
             app.service.advice_provider = RecordingAdviceProvider()
             app._request_advice()
             assert app.query_one("#move-input", Input).value == "DRAW"
+            provider = app.service.advice_provider
+            assert isinstance(provider, RecordingAdviceProvider)
+            assert provider.seen_limit == SearchLimit(depth_limit=1)
 
             app.service.advice_provider = EmptyAdviceProvider()
             app._request_advice()

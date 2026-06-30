@@ -21,6 +21,12 @@ Start from a reproducible deal:
 patiencepilot-tui --seed 7 --draw-count 3
 ```
 
+Choose a registered solver and advice search limits:
+
+```bash
+patiencepilot-tui --solver dummy --advice-depth-limit 1
+```
+
 Save and load a session JSON payload:
 
 ```bash
@@ -60,6 +66,10 @@ Useful controls:
 * Select Advice to ask the built-in dummy solver for the next move. The dummy
     solver recommends the first listed legal move and fills the move input with
     that move ID.
+
+Advice uses the solver selected with `--solver`. The TUI also accepts
+`--advice-time-limit`, `--advice-node-limit`, and `--advice-depth-limit`; the
+depth limit defaults to `1` for quick interactive advice.
 
 In real-world mode, Save and Load are currently disabled while persistence for
 player-known mirror sessions is still being designed.

@@ -34,7 +34,7 @@ from patiencepilot.moves import (
     WasteToTableau,
 )
 from patiencepilot.notation import move_from_id, move_to_id
-from patiencepilot.solvers import DummySolver, SearchLimit, visible_klondike_moves
+from patiencepilot.solvers import SearchLimit, visible_klondike_moves
 from patiencepilot.state import SUIT_ORDER, StackCard
 from patiencepilot.variants.base import Seed
 from patiencepilot.view import PlayerStackCard, PlayerView, UnknownCardConstraints
@@ -50,6 +50,10 @@ class TuiOptions:
     load_path: Path | None = None
     save_path: Path | None = None
     real_world: bool = False
+    solver: str = "dummy"
+    advice_time_limit: float | None = None
+    advice_node_limit: int | None = None
+    advice_depth_limit: int | None = 1
 
 
 @dataclass(frozen=True, slots=True)
@@ -205,7 +209,7 @@ class PatiencePilotTui(App[None]):
         self.options = TuiOptions() if options is None else options
         self.service = PatiencePilotApp() if app_service is None else app_service
         if self.service.advice_provider is None:
-            self.service.advice_provider = DummySolver()
+            self.service.select_solver(self.options.solver)
         self._last_effects: tuple[MoveEffect, ...] = ()
         self._status = "Ready."
         self._known_session: KnownGameSession | None = None
@@ -436,7 +440,7 @@ class PatiencePilotTui(App[None]):
             self._request_known_advice()
             return
         try:
-            advice = self.service.request_advice(limit=SearchLimit(depth_limit=1))
+            advice = self.service.request_advice(limit=self._advice_limit())
         except PatiencePilotError as error:
             self._set_status(str(error))
             return
@@ -647,13 +651,31 @@ class PatiencePilotTui(App[None]):
         if self.service.advice_provider is None:
             self._set_status("No advice provider configured.")
             return
-        advice = self.service.advice_provider.suggest(known.view, limit=SearchLimit(depth_limit=1))
+        try:
+            advice = self.service.advice_provider.suggest(known.view, limit=self._advice_limit())
+        except PatiencePilotError as error:
+            self._set_status(str(error))
+            return
         best_move = advice.best_move
         if best_move is None:
             self._set_status("No advice available.")
             return
         self.query_one("#move-input", Input).value = move_to_id(best_move)
         self._set_status(f"Advice: try {move_to_id(best_move)}.")
+
+    def _advice_limit(self) -> SearchLimit | None:
+        """Return configured solver search limits."""
+        if (
+            self.options.advice_time_limit is None
+            and self.options.advice_node_limit is None
+            and self.options.advice_depth_limit is None
+        ):
+            return None
+        return SearchLimit(
+            time_seconds=self.options.advice_time_limit,
+            node_limit=self.options.advice_node_limit,
+            depth_limit=self.options.advice_depth_limit,
+        )
 
     def _write_session(self, path: Path) -> None:
         """Write the current session to ``path``."""
@@ -698,6 +720,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--redeals", metavar="N|none", help="Klondike redeal limit, or none for unlimited redeals.")
     parser.add_argument("--load", type=Path, metavar="PATH", help="Load a saved session JSON payload.")
     parser.add_argument("--save", type=Path, metavar="PATH", help="Save the session JSON payload from the TUI.")
+    parser.add_argument("--solver", default="dummy", metavar="NAME", help="Registered solver name or alias.")
+    parser.add_argument("--advice-time-limit", type=float, metavar="SECONDS", help="Optional solver time limit.")
+    parser.add_argument("--advice-node-limit", type=int, metavar="NODES", help="Optional solver node limit.")
+    parser.add_argument(
+        "--advice-depth-limit",
+        type=int,
+        default=1,
+        metavar="DEPTH",
+        help="Optional solver depth limit. Defaults to 1 for quick interactive advice.",
+    )
     parser.add_argument(
         "--real-world",
         action="store_true",
@@ -722,6 +754,10 @@ def options_from_args(args: argparse.Namespace) -> TuiOptions:
         load_path=args.load,
         save_path=args.save,
         real_world=args.real_world,
+        solver=args.solver,
+        advice_time_limit=args.advice_time_limit,
+        advice_node_limit=args.advice_node_limit,
+        advice_depth_limit=args.advice_depth_limit,
     )
 
 

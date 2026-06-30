@@ -206,6 +206,28 @@ def test_cli_advice_command_is_wired_to_provider_boundary(tmp_path: Path) -> Non
     assert stdout.getvalue() == "Advice:\n1. DRAW\n"
 
 
+def test_cli_advice_selects_solver_by_name_or_alias(tmp_path: Path) -> None:
+    save_path = tmp_path / "game.json"
+    run(["new", "--seed", "12", "--save", str(save_path)])
+    stdout = StringIO()
+
+    code = run(["advice", "--load", str(save_path), "--solver", "trivial"], stdout=stdout)
+
+    assert code == 0
+    assert stdout.getvalue() == "Advice:\n1. DRAW\n"
+
+
+def test_cli_advice_reports_unknown_solver(tmp_path: Path) -> None:
+    save_path = tmp_path / "game.json"
+    run(["new", "--seed", "12", "--save", str(save_path)])
+    stderr = StringIO()
+
+    code = run(["advice", "--load", str(save_path), "--solver", "missing"], stderr=stderr)
+
+    assert code == 2
+    assert "unsupported solver" in stderr.getvalue()
+
+
 def test_cli_advice_accepts_all_search_limit_options(tmp_path: Path) -> None:
     save_path = tmp_path / "game.json"
     run(["new", "--seed", "12", "--save", str(save_path)])

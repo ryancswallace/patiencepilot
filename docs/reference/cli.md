@@ -50,6 +50,12 @@ Ask the built-in dummy solver for the next move:
 patiencepilot-cli advice --load game.json
 ```
 
+Select a registered solver by name or alias and pass search limits:
+
+```bash
+patiencepilot-cli advice --load game.json --solver dummy --depth-limit 1
+```
+
 The dummy solver is deterministic and recommends the first listed legal move.
-The command accepts search-limit flags so future solvers can reuse the same
-interface.
+The command accepts `--time-limit`, `--node-limit`, and `--depth-limit` so
+future solvers can reuse the same interface.
