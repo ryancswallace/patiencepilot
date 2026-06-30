@@ -96,17 +96,32 @@ nav:
       - Changelog: project/changelog.md
   - Reference:
       - Reference overview: reference/index.md
+      - Command line: reference/cli.md
+      - Terminal user interface: reference/tui.md
       - API:
           - Package: reference/api/index.md
+          - CLI entry point: reference/api/cli.md
+          - TUI entry point: reference/api/tui.md
+          - Application service: reference/api/app.md
           - Cards: reference/api/cards.md
           - State: reference/api/state.md
+          - Player view: reference/api/view.md
           - Moves: reference/api/moves.md
+          - Notation: reference/api/notation.md
+          - Solvers:
+              - Solvers package: reference/api/solvers/index.md
+              - Solver base: reference/api/solvers/base.md
           - Engine: reference/api/engine.md
           - Exceptions: reference/api/exceptions.md
           - Game: reference/api/game.md
+          - UI:
+              - UI package: reference/api/ui/index.md
+              - Command line UI: reference/api/ui/cli.md
+              - Terminal UI: reference/api/ui/tui.md
           - Variants:
               - Variants package: reference/api/variants/index.md
               - Variant base: reference/api/variants/base.md
+              - Variant registry: reference/api/variants/registry.md
               - Klondike: reference/api/variants/klondike.md
       - Compatibility: reference/compatibility.md
       - Configuration and automation: reference/configuration.md

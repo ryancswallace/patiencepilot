@@ -2,6 +2,16 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
+from .app import (
+    PatiencePilotApp,
+    SerializedSession,
+    ValidationReport,
+    export_session,
+    import_session,
+    migrate_session_payload,
+    validate_session_payload,
+    validate_state_payload,
+)
 from .cards import Card, Color, Rank, Suit, standard_deck
 from .engine import apply_move, is_won, legal_moves, new_game, validate_state
 from .exceptions import (
@@ -12,6 +22,7 @@ from .exceptions import (
     SolverLimitError,
     UnsupportedVariantError,
 )
+from .game import GameSession, SessionStep
 from .moves import (
     DrawFromStock,
     DrewStockCards,
@@ -25,8 +36,47 @@ from .moves import (
     WasteToFoundation,
     WasteToTableau,
 )
-from .state import GameState, StackCard, UnknownCard
-from .variants import KlondikeRules, Variant
+from .notation import (
+    SCHEMA_VERSION,
+    SerializedGameState,
+    SerializedMove,
+    SerializedPlayerStackCard,
+    SerializedPlayerView,
+    SerializedStackCard,
+    SerializedUnknownCardConstraints,
+    ValidationDiagnostic,
+    ValidationResult,
+    deserialize_move,
+    deserialize_player_view,
+    deserialize_state,
+    migrate_state_payload,
+    move_from_id,
+    move_to_id,
+    serialize_move,
+    serialize_player_view,
+    serialize_state,
+    state_from_text,
+    state_to_text,
+    validate_move_id,
+    validate_serialized_move,
+    validate_serialized_state,
+    validate_state_text,
+)
+from .solvers import Advice, AdviceProvider, RankedMove, SearchLimit, Solver
+from .state import GameState, StackCard
+from .variants import (
+    DEFAULT_VARIANT_REGISTRY,
+    KlondikeRules,
+    Variant,
+    VariantDefinition,
+    VariantOptions,
+    VariantRegistry,
+    resolve_state_variant,
+    resolve_variant,
+    variant_names,
+    variant_options_from_state,
+)
+from .view import PlayerStackCard, PlayerView, UnknownCardConstraints
 
 try:
     __version__ = version("patiencepilot")
@@ -35,10 +85,15 @@ except PackageNotFoundError:
 
 
 __all__ = [
+    "DEFAULT_VARIANT_REGISTRY",
+    "SCHEMA_VERSION",
+    "Advice",
+    "AdviceProvider",
     "Card",
     "Color",
     "DrawFromStock",
     "DrewStockCards",
+    "GameSession",
     "GameState",
     "InvalidMoveError",
     "InvalidStateError",
@@ -46,26 +101,70 @@ __all__ = [
     "MoveResult",
     "MovedCards",
     "NotationError",
+    "PatiencePilotApp",
     "PatiencePilotError",
+    "PlayerStackCard",
+    "PlayerView",
     "Rank",
+    "RankedMove",
     "RecycleWaste",
     "RecycledWaste",
     "RevealedTableauCard",
+    "SearchLimit",
+    "SerializedGameState",
+    "SerializedMove",
+    "SerializedPlayerStackCard",
+    "SerializedPlayerView",
+    "SerializedSession",
+    "SerializedStackCard",
+    "SerializedUnknownCardConstraints",
+    "SessionStep",
+    "Solver",
     "SolverLimitError",
     "StackCard",
     "Suit",
     "TableauToFoundation",
     "TableauToTableau",
-    "UnknownCard",
+    "UnknownCardConstraints",
     "UnsupportedVariantError",
+    "ValidationDiagnostic",
+    "ValidationReport",
+    "ValidationResult",
     "Variant",
+    "VariantDefinition",
+    "VariantOptions",
+    "VariantRegistry",
     "WasteToFoundation",
     "WasteToTableau",
     "__version__",
     "apply_move",
+    "deserialize_move",
+    "deserialize_player_view",
+    "deserialize_state",
+    "export_session",
+    "import_session",
     "is_won",
     "legal_moves",
+    "migrate_session_payload",
+    "migrate_state_payload",
+    "move_from_id",
+    "move_to_id",
     "new_game",
+    "resolve_state_variant",
+    "resolve_variant",
+    "serialize_move",
+    "serialize_player_view",
+    "serialize_state",
     "standard_deck",
+    "state_from_text",
+    "state_to_text",
+    "validate_move_id",
+    "validate_serialized_move",
+    "validate_serialized_state",
+    "validate_session_payload",
     "validate_state",
+    "validate_state_payload",
+    "validate_state_text",
+    "variant_names",
+    "variant_options_from_state",
 ]

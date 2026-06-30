@@ -49,14 +49,19 @@ smoke tests with branch coverage enabled:
 make test
 ```
 
+Line coverage must stay at or above 95%. Prefer adding tests that exercise
+observable behavior, validation diagnostics, and important edge cases over
+asserting implementation details.
+
 Useful focused runs:
 
 ```bash
-uv run pytest -m unit
-uv run pytest -m property
-uv run pytest -m integration
-uv run pytest -m "integration and slow"
-uv run pytest -m "not slow"
+uv run pytest tests/test_notation.py --no-cov
+uv run pytest -m unit --no-cov
+uv run pytest -m property --no-cov
+uv run pytest -m integration --no-cov
+uv run pytest -m "integration and slow" --no-cov
+uv run pytest -m "not slow" --no-cov
 ```
 
 Markers:

@@ -129,8 +129,8 @@ class KlondikeRules:
 
         for column_index, column in enumerate(state.tableau):
             for stack_card in column:
-                if stack_card.face_up and stack_card.visible_card is None:
-                    msg = f"tableau column {column_index} contains a face-up unknown card"
+                if not isinstance(stack_card.card, Card):
+                    msg = f"tableau column {column_index} contains a non-card value"
                     raise InvalidStateError(msg)
 
     def legal_moves(self, state: GameState) -> tuple[Move, ...]:
@@ -380,14 +380,10 @@ class KlondikeRules:
         if not column or column[-1].face_up:
             return tableau, ()
 
-        top_card = column[-1].known_card
-        if top_card is None:
-            return tableau, ()
-
-        revealed_column = (*column[:-1], StackCard.visible(top_card))
+        revealed_column = (*column[:-1], StackCard.visible(column[-1].card))
         return (
             self._replace_tableau_column(tableau, column_index, revealed_column),
-            (RevealedTableauCard(column=column_index, card=top_card),),
+            (RevealedTableauCard(column=column_index, card=column[-1].card),),
         )
 
     @staticmethod

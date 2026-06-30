@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import TypeAlias
 
 from .cards import Card, Suit
 
@@ -13,20 +12,10 @@ SUIT_ORDER: tuple[Suit, ...] = tuple(Suit)
 
 
 @dataclass(frozen=True, slots=True)
-class UnknownCard:
-    """A placeholder for a card whose identity is not known yet."""
-
-    label: str = "unknown"
-
-
-CardValue: TypeAlias = Card | UnknownCard
-
-
-@dataclass(frozen=True, slots=True)
 class StackCard:
     """A card in a tableau stack with visibility metadata."""
 
-    card: CardValue
+    card: Card
     face_up: bool
 
     @classmethod
@@ -35,22 +24,20 @@ class StackCard:
         return cls(card=card, face_up=True)
 
     @classmethod
-    def hidden(cls, card: CardValue) -> StackCard:
+    def hidden(cls, card: Card) -> StackCard:
         """Return a face-down tableau card."""
         return cls(card=card, face_up=False)
 
     @property
-    def known_card(self) -> Card | None:
-        """Return the exact card identity when it is known."""
-        if isinstance(self.card, Card):
-            return self.card
-        return None
+    def known_card(self) -> Card:
+        """Return the exact card identity."""
+        return self.card
 
     @property
     def visible_card(self) -> Card | None:
         """Return the card when it is both known and face up."""
         if self.face_up:
-            return self.known_card
+            return self.card
         return None
 
 
@@ -107,7 +94,6 @@ class GameState:
             yield from foundation
         for column in self.tableau:
             for stack_card in column:
-                if stack_card.known_card is not None:
-                    yield stack_card.known_card
+                yield stack_card.card
         yield from self.stock
         yield from self.waste

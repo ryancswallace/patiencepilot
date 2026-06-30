@@ -63,7 +63,7 @@ class MovedCards:
 
 @dataclass(frozen=True, slots=True)
 class RevealedTableauCard:
-    """Effect describing a newly revealed tableau card."""
+    """Effect describing a tableau card automatically revealed by the engine."""
 
     column: int
     card: Card
