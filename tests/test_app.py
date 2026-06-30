@@ -9,6 +9,7 @@ import pytest
 from patiencepilot import (
     Advice,
     DrawFromStock,
+    DummySolver,
     InvalidStateError,
     NotationError,
     PatiencePilotApp,
@@ -43,6 +44,15 @@ def test_app_selects_variant_and_starts_session() -> None:
     assert session.seed == 7
     assert session.metadata == {"source": "test"}
     assert session.ui_state == {"selected": "stock"}
+
+
+def test_app_selects_solver_by_registry_name_or_alias() -> None:
+    app = PatiencePilotApp()
+
+    solver = app.select_solver("trivial")
+
+    assert isinstance(solver, DummySolver)
+    assert app.advice_provider is solver
 
 
 def test_app_delegates_session_moves_undo_and_redo() -> None:

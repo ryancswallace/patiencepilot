@@ -30,6 +30,7 @@ from patiencepilot import (
     legal_moves,
     visible_klondike_moves,
 )
+from solver_harness import SolverCase, SolverHarness
 
 pytestmark = pytest.mark.unit
 
@@ -142,6 +143,42 @@ def test_dummy_solver_returns_the_first_player_visible_legal_move() -> None:
     assert advice.nodes_searched == len(legal_moves(session.state))
     assert advice.depth_reached == 0
     assert visible_klondike_moves(view) == legal_moves(session.state)
+
+
+def test_dummy_solver_satisfies_shared_solver_harness() -> None:
+    harness = SolverHarness(DummySolver)
+    hidden_state = GameState(
+        foundations=((), (), (), ()),
+        tableau=(
+            (StackCard.hidden(Card.from_code("5C")), StackCard.visible(Card.from_code("4H"))),
+            (),
+            (),
+            (),
+            (),
+            (),
+            (),
+        ),
+        stock=(Card.from_code("AS"),),
+        waste=(),
+    )
+    hidden_view = PlayerView.from_state(hidden_state)
+
+    harness.assert_view_hides_unknown_tableau_cards(hidden_view)
+    harness.assert_case(
+        SolverCase(
+            name="initial deal",
+            view=PlayerView.from_state(GameSession.new(seed=1).state),
+            expected_best=DrawFromStock(),
+        )
+    )
+    harness.assert_case(SolverCase(name="hidden tableau identities", view=hidden_view, expected_best=DrawFromStock()))
+
+    complete_foundations = tuple(tuple(Card(rank=rank, suit=suit) for rank in Rank) for suit in Suit)
+    no_move_view = PlayerView.from_state(
+        GameState(foundations=complete_foundations, tableau=((), (), (), (), (), (), ()), stock=(), waste=())
+    )
+    advice = harness.assert_case(SolverCase(name="no visible legal moves", view=no_move_view))
+    assert advice.recommendations == ()
 
 
 def test_dummy_solver_returns_empty_advice_when_no_visible_moves_exist() -> None:

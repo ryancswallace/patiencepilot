@@ -28,6 +28,18 @@ patiencepilot-tui --save game.json
 patiencepilot-tui --load game.json --save game.json
 ```
 
+Mirror a physical-card game instead of starting from an internal deal:
+
+```bash
+patiencepilot-tui --real-world --draw-count 3
+```
+
+Real-world mode starts with a guided setup wizard for the seven visible tableau
+cards. After that, the TUI tracks a player-known view of the game: hidden
+tableau and stock cards remain unknown, drawn cards and newly revealed tableau
+cards are prompted for immediately, and visible duplicate/impossible cards are
+rejected.
+
 The interface shows the current board, legal move IDs, recent history, and the
 latest move effects. Hidden tableau cards are rendered as `##`, so the TUI does
 not reveal unseen card identities.
@@ -48,3 +60,6 @@ Useful controls:
 * Select Advice to ask the built-in dummy solver for the next move. The dummy
     solver recommends the first listed legal move and fills the move input with
     that move ID.
+
+In real-world mode, Save and Load are currently disabled while persistence for
+player-known mirror sessions is still being designed.

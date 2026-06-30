@@ -25,7 +25,7 @@ from .notation import (
     state_to_text,
     validate_serialized_state,
 )
-from .solvers import Advice, AdviceProvider, SearchLimit
+from .solvers import Advice, AdviceProvider, SearchLimit, resolve_solver
 from .state import GameState
 from .variants.base import Seed, Variant
 from .variants.registry import VariantOptions, resolve_variant, variant_options_from_state
@@ -80,6 +80,15 @@ class PatiencePilotApp:
         self.variant = rules.name
         self.options = {} if options is None else dict(options)
         return rules
+
+    def select_solver(self, name: str = "dummy") -> AdviceProvider:
+        """Select the advice provider used for future advice requests.
+
+        Args:
+            name: Registered solver name or alias.
+        """
+        self.advice_provider = resolve_solver(name)
+        return self.advice_provider
 
     def new_session(
         self,

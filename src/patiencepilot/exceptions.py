@@ -17,6 +17,10 @@ class UnsupportedVariantError(PatiencePilotError):
     """Raised when a Solitaire variant is not supported."""
 
 
+class UnsupportedSolverError(PatiencePilotError):
+    """Raised when a solver is not supported."""
+
+
 class SolverLimitError(PatiencePilotError):
     """Raised when a solver cannot continue within configured limits."""
 

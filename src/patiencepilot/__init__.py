@@ -20,6 +20,7 @@ from .exceptions import (
     NotationError,
     PatiencePilotError,
     SolverLimitError,
+    UnsupportedSolverError,
     UnsupportedVariantError,
 )
 from .game import GameSession, SessionStep
@@ -62,7 +63,21 @@ from .notation import (
     validate_serialized_state,
     validate_state_text,
 )
-from .solvers import Advice, AdviceProvider, DummySolver, RankedMove, SearchLimit, Solver, visible_klondike_moves
+from .solvers import (
+    DEFAULT_SOLVER_REGISTRY,
+    Advice,
+    AdviceProvider,
+    DummySolver,
+    RankedMove,
+    SearchLimit,
+    Solver,
+    SolverDefinition,
+    SolverFactory,
+    SolverRegistry,
+    resolve_solver,
+    solver_names,
+    visible_klondike_moves,
+)
 from .state import GameState, StackCard
 from .variants import (
     DEFAULT_VARIANT_REGISTRY,
@@ -85,6 +100,7 @@ except PackageNotFoundError:
 
 
 __all__ = [
+    "DEFAULT_SOLVER_REGISTRY",
     "DEFAULT_VARIANT_REGISTRY",
     "SCHEMA_VERSION",
     "Advice",
@@ -121,12 +137,16 @@ __all__ = [
     "SerializedUnknownCardConstraints",
     "SessionStep",
     "Solver",
+    "SolverDefinition",
+    "SolverFactory",
     "SolverLimitError",
+    "SolverRegistry",
     "StackCard",
     "Suit",
     "TableauToFoundation",
     "TableauToTableau",
     "UnknownCardConstraints",
+    "UnsupportedSolverError",
     "UnsupportedVariantError",
     "ValidationDiagnostic",
     "ValidationReport",
@@ -151,11 +171,13 @@ __all__ = [
     "move_from_id",
     "move_to_id",
     "new_game",
+    "resolve_solver",
     "resolve_state_variant",
     "resolve_variant",
     "serialize_move",
     "serialize_player_view",
     "serialize_state",
+    "solver_names",
     "standard_deck",
     "state_from_text",
     "state_to_text",
