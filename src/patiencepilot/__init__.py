@@ -62,7 +62,7 @@ from .notation import (
     validate_serialized_state,
     validate_state_text,
 )
-from .solvers import Advice, AdviceProvider, RankedMove, SearchLimit, Solver
+from .solvers import Advice, AdviceProvider, DummySolver, RankedMove, SearchLimit, Solver, visible_klondike_moves
 from .state import GameState, StackCard
 from .variants import (
     DEFAULT_VARIANT_REGISTRY,
@@ -93,6 +93,7 @@ __all__ = [
     "Color",
     "DrawFromStock",
     "DrewStockCards",
+    "DummySolver",
     "GameSession",
     "GameState",
     "InvalidMoveError",
@@ -167,4 +168,5 @@ __all__ = [
     "validate_state_text",
     "variant_names",
     "variant_options_from_state",
+    "visible_klondike_moves",
 ]

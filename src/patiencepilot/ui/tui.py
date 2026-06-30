@@ -11,7 +11,7 @@ from typing import ClassVar
 
 from textual.app import App, ComposeResult
 from textual.binding import BindingType
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Horizontal, Vertical
 from textual.widgets import Button, Footer, Header, Input, Static
 
 from patiencepilot import __version__
@@ -21,7 +21,7 @@ from patiencepilot.exceptions import PatiencePilotError
 from patiencepilot.game import GameSession
 from patiencepilot.moves import DrewStockCards, MovedCards, MoveEffect, RecycledWaste, RevealedTableauCard
 from patiencepilot.notation import move_from_id, move_to_id
-from patiencepilot.solvers import SearchLimit
+from patiencepilot.solvers import DummySolver, SearchLimit
 from patiencepilot.state import SUIT_ORDER, StackCard
 from patiencepilot.variants.base import Seed
 
@@ -52,16 +52,16 @@ class PatiencePilotTui(App[None]):
     }
 
     #board-panel {
-        width: 2fr;
-        min-width: 58;
-        padding: 1 2;
+        width: 1fr;
+        min-width: 34;
+        padding: 1;
         border: round #2f81f7;
         background: #111827;
     }
 
     #side-panel {
-        width: 34;
-        min-width: 30;
+        width: 1fr;
+        min-width: 38;
         padding: 1;
         border: round #3fb950;
         background: #0f172a;
@@ -79,7 +79,16 @@ class PatiencePilotTui(App[None]):
     }
 
     #move-input {
-        margin: 1 0;
+        margin: 0 0 1 0;
+    }
+
+    #buttons {
+        height: 8;
+        margin-bottom: 1;
+    }
+
+    .button-row {
+        height: 4;
     }
 
     #status {
@@ -105,8 +114,9 @@ class PatiencePilotTui(App[None]):
     }
 
     Button {
-        min-width: 9;
-        margin: 0 1 1 0;
+        width: 1fr;
+        min-width: 7;
+        margin: 1 1 0 0;
     }
 
     Button.primary {
@@ -137,6 +147,8 @@ class PatiencePilotTui(App[None]):
         super().__init__()
         self.options = TuiOptions() if options is None else options
         self.service = PatiencePilotApp() if app_service is None else app_service
+        if self.service.advice_provider is None:
+            self.service.advice_provider = DummySolver()
         self._last_effects: tuple[MoveEffect, ...] = ()
         self._status = "Ready."
 
@@ -149,16 +161,18 @@ class PatiencePilotTui(App[None]):
                 yield Static("", id="board")
             with Vertical(id="side-panel"):
                 yield Static("Controls", classes="panel-title")
-                with Container(id="buttons"):
-                    yield Button("Apply", id="apply", variant="success", classes="primary")
-                    yield Button("Draw", id="draw")
-                    yield Button("Undo", id="undo")
-                    yield Button("Redo", id="redo")
-                    yield Button("New", id="new", variant="primary")
-                    yield Button("Save", id="save")
-                    yield Button("Load", id="load")
-                    yield Button("Advice", id="advice", classes="warning")
-                yield Input(placeholder="Move ID, e.g. DRAW", id="move-input")
+                with Vertical(id="buttons"):
+                    with Horizontal(classes="button-row"):
+                        yield Button("Apply", id="apply", variant="success", classes="primary")
+                        yield Button("Draw", id="draw")
+                        yield Button("Undo", id="undo")
+                        yield Button("Redo", id="redo")
+                    with Horizontal(classes="button-row"):
+                        yield Button("New", id="new", variant="primary")
+                        yield Button("Save", id="save")
+                        yield Button("Load", id="load")
+                        yield Button("Advice", id="advice", classes="warning")
+                yield Input(placeholder="Move ID or number, e.g., DRAW or 2", id="move-input")
                 yield Static("", id="legal-moves")
                 yield Static("", id="history")
                 yield Static("", id="status")
@@ -290,9 +304,14 @@ class PatiencePilotTui(App[None]):
 
     def _apply_entered_move(self) -> None:
         """Apply the current move input value."""
-        move_id = self.query_one("#move-input", Input).value.strip()
-        if not move_id:
+        move_input = self.query_one("#move-input", Input).value.strip()
+        if not move_input:
             self._set_status("Enter a move ID first.")
+            return
+        try:
+            move_id = _move_id_from_input(self.session, move_input)
+        except ValueError as error:
+            self._set_status(str(error))
             return
         self._apply_move_id(move_id)
 
@@ -417,6 +436,21 @@ def render_status(status: str, effects: tuple[MoveEffect, ...]) -> str:
     if not effects:
         return status
     return status + "\n" + "\n".join(f"- {_format_effect(effect)}" for effect in effects)
+
+
+def _move_id_from_input(session: GameSession, text: str) -> str:
+    """Return a move ID from either a move ID or displayed list number."""
+    move_input = text.strip()
+    if not move_input.isdecimal():
+        return move_input
+
+    move_number = int(move_input)
+    legal_moves = session.legal_moves()
+    if 1 <= move_number <= len(legal_moves):
+        return move_to_id(legal_moves[move_number - 1])
+
+    msg = f"Move number {move_number} is not in the legal move list."
+    raise ValueError(msg)
 
 
 def _tableau_rows(tableau: tuple[tuple[StackCard, ...], ...]) -> list[tuple[str, ...]]:

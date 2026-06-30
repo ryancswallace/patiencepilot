@@ -15,7 +15,7 @@ from patiencepilot.exceptions import PatiencePilotError
 from patiencepilot.game import GameSession
 from patiencepilot.moves import DrewStockCards, MovedCards, MoveEffect, RecycledWaste, RevealedTableauCard
 from patiencepilot.notation import move_from_id, move_to_id, state_from_text, state_to_text
-from patiencepilot.solvers import Advice, SearchLimit
+from patiencepilot.solvers import Advice, DummySolver, SearchLimit
 from patiencepilot.variants.base import Seed
 
 
@@ -49,17 +49,17 @@ def run(
         args = parser.parse_args(argv)
         return _dispatch(args, input_stream, output_stream, error_stream)
     except (PatiencePilotError, OSError, ValueError, json.JSONDecodeError) as error:
-        print(f"patiencepilot: {error}", file=error_stream)
+        print(f"patiencepilot-cli: {error}", file=error_stream)
         return 2
 
 
 def build_parser() -> argparse.ArgumentParser:
     """Return the CLI argument parser."""
     parser = argparse.ArgumentParser(
-        prog="patiencepilot",
+        prog="patiencepilot-cli",
         description="Play and inspect Solitaire games from the command line.",
     )
-    parser.add_argument("--version", action="version", version=f"patiencepilot {__version__}")
+    parser.add_argument("--version", action="version", version=f"patiencepilot-cli {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     new_parser = subparsers.add_parser("new", help="Deal a new game.")
@@ -187,7 +187,7 @@ def _command_undo(args: argparse.Namespace, stdin: TextIO, stdout: TextIO, stder
 def _command_advice(args: argparse.Namespace, stdin: TextIO, stdout: TextIO) -> int:
     """Ask the configured advice provider for move advice."""
     app = _load_app(args, stdin)
-    advice = app.request_advice(limit=_search_limit_from_args(args))
+    advice = app.request_advice(provider=DummySolver(), limit=_search_limit_from_args(args))
     _print_advice(advice, stdout)
     return 0
 

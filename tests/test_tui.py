@@ -27,6 +27,7 @@ from patiencepilot import (
     RevealedTableauCard,
     SearchLimit,
     Suit,
+    move_to_id,
 )
 from patiencepilot.view import PlayerView
 
@@ -38,6 +39,7 @@ def test_tui_packaging_declares_script_and_optional_extra() -> None:
     project = config["project"]
 
     assert project["scripts"]["patiencepilot-tui"] == "patiencepilot.tui:main"
+    assert project["scripts"]["patp-tui"] == "patiencepilot.tui:main"
     assert project["optional-dependencies"]["tui"] == ["textual>=6.12,<7"]
 
 
@@ -151,6 +153,43 @@ def test_tui_mounted_app_can_apply_undo_redo_save_and_load(tmp_path: Path) -> No
     asyncio.run(scenario())
 
 
+def test_tui_layout_keeps_control_buttons_visible_at_normal_terminal_size() -> None:
+    async def scenario() -> None:
+        app = tui.PatiencePilotTui(tui.TuiOptions(seed=1))
+        async with app.run_test(size=(80, 24)) as pilot:
+            await pilot.pause()
+            side_region = app.query_one("#side-panel").region
+            board_region = app.query_one("#board-panel").region
+            input_region = app.query_one("#move-input", Input).region
+
+            assert side_region.width >= 38
+            assert abs(board_region.width - side_region.width) <= 1
+            for button_id in ("apply", "draw", "undo", "redo", "new", "save", "load", "advice"):
+                button_region = app.query_one(f"#{button_id}", Button).region
+                assert button_region.x >= side_region.x
+                assert button_region.x + button_region.width <= side_region.x + side_region.width
+                assert button_region.y + button_region.height <= input_region.y
+
+    asyncio.run(scenario())
+
+
+def test_tui_mounted_app_can_apply_displayed_legal_move_number() -> None:
+    async def scenario() -> None:
+        app = tui.PatiencePilotTui(tui.TuiOptions(seed=1))
+        async with app.run_test(size=(110, 40)) as pilot:
+            await pilot.pause()
+            legal_move_ids = tuple(move_to_id(move) for move in app.session.legal_moves())
+
+            app.query_one("#move-input", Input).value = "2"
+            app._apply_entered_move()
+            await pilot.pause()
+
+            assert move_to_id(app.session.move_history[-1]) == legal_move_ids[1]
+            assert f"Applied {legal_move_ids[1]}." in _static_text(app, "#status")
+
+    asyncio.run(scenario())
+
+
 def test_tui_mounted_app_reports_errors_and_advice_status(tmp_path: Path) -> None:
     async def scenario() -> None:
         app = tui.PatiencePilotTui(tui.TuiOptions(seed=8))
@@ -175,8 +214,13 @@ def test_tui_mounted_app_reports_errors_and_advice_status(tmp_path: Path) -> Non
             app._apply_entered_move()
             assert "invalid move id" in _static_text(app, "#status")
 
+            app.query_one("#move-input", Input).value = "999"
+            app._apply_entered_move()
+            assert "Move number 999 is not in the legal move list." in _static_text(app, "#status")
+
             app._request_advice()
-            assert "no advice provider configured" in _static_text(app, "#status")
+            assert app.query_one("#move-input", Input).value == "DRAW"
+            assert "Advice: try DRAW." in _static_text(app, "#status")
 
             app.service.advice_provider = RecordingAdviceProvider()
             app._request_advice()

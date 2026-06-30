@@ -106,6 +106,7 @@
         "ossf",
         "pathlib",
         "patiencepilot",
+        "patp",
         "pipaudit",
         "pipefail",
         "posargs",

@@ -8,13 +8,27 @@ import pytest
 
 from patiencepilot import (
     Advice,
+    Card,
     DrawFromStock,
+    DummySolver,
+    GameSession,
+    GameState,
     InvalidStateError,
     PatiencePilotApp,
     PlayerView,
+    Rank,
     RankedMove,
+    RecycleWaste,
     SearchLimit,
+    StackCard,
+    Suit,
+    TableauToFoundation,
+    TableauToTableau,
+    UnsupportedVariantError,
     WasteToFoundation,
+    WasteToTableau,
+    legal_moves,
+    visible_klondike_moves,
 )
 
 pytestmark = pytest.mark.unit
@@ -115,6 +129,94 @@ def test_app_passes_player_view_to_advice_providers_without_hidden_cards() -> No
     assert provider.seen_view.stock_count == len(session.state.stock)
     assert seen_card in provider.seen_view.seen_cards
     assert all(card.card is None for column in provider.seen_view.tableau for card in column if not card.face_up)
+
+
+def test_dummy_solver_returns_the_first_player_visible_legal_move() -> None:
+    session = GameSession.new(seed=1)
+    view = PlayerView.from_state(session.state)
+
+    advice = DummySolver().suggest(view, limit=SearchLimit(depth_limit=1))
+
+    assert advice.solver_name == "dummy"
+    assert advice.best_move == legal_moves(session.state)[0]
+    assert advice.nodes_searched == len(legal_moves(session.state))
+    assert advice.depth_reached == 0
+    assert visible_klondike_moves(view) == legal_moves(session.state)
+
+
+def test_dummy_solver_returns_empty_advice_when_no_visible_moves_exist() -> None:
+    complete_foundations = tuple(tuple(Card(rank=rank, suit=suit) for rank in Rank) for suit in Suit)
+    state = GameState(foundations=complete_foundations, tableau=((), (), (), (), (), (), ()), stock=(), waste=())
+
+    advice = DummySolver().suggest(PlayerView.from_state(state))
+
+    assert advice.recommendations == ()
+    assert advice.solver_name == "dummy"
+
+
+def test_dummy_solver_finds_visible_waste_moves_and_recycles() -> None:
+    state = GameState(
+        foundations=((), (), (), (Card.from_code("AS"),)),
+        tableau=((), (), (), (), (), (), ()),
+        stock=(),
+        waste=(Card.from_code("2S"),),
+    )
+
+    moves = visible_klondike_moves(PlayerView.from_state(state))
+
+    assert moves[:2] == (RecycleWaste(), WasteToFoundation())
+
+    king_state = GameState.empty()
+    king_state = GameState(
+        foundations=king_state.foundations,
+        tableau=king_state.tableau,
+        stock=(),
+        waste=(Card.from_code("KH"),),
+    )
+
+    assert WasteToTableau(destination=0) in visible_klondike_moves(PlayerView.from_state(king_state))
+
+
+def test_dummy_solver_finds_visible_tableau_moves() -> None:
+    state = GameState(
+        foundations=((), (), (), ()),
+        tableau=(
+            (StackCard.visible(Card.from_code("AS")),),
+            (StackCard.visible(Card.from_code("5C")),),
+            (StackCard.visible(Card.from_code("4H")), StackCard.visible(Card.from_code("3C"))),
+            (),
+            (),
+            (),
+            (),
+        ),
+        stock=(),
+        waste=(),
+    )
+
+    moves = visible_klondike_moves(PlayerView.from_state(state))
+
+    assert TableauToFoundation(source=0) in moves
+    assert TableauToTableau(source=2, destination=1, count=2) in moves
+
+
+def test_dummy_solver_does_not_place_cards_on_hidden_tableau_tops() -> None:
+    state = GameState(
+        foundations=((), (), (), ()),
+        tableau=((StackCard.hidden(Card.from_code("5C")),), (), (), (), (), (), ()),
+        stock=(),
+        waste=(Card.from_code("4H"),),
+    )
+
+    moves = visible_klondike_moves(PlayerView.from_state(state))
+
+    assert WasteToTableau(destination=0) not in moves
+
+
+def test_dummy_solver_rejects_unsupported_variants() -> None:
+    view = PlayerView.from_state(GameState.empty(variant="spider"))
+
+    with pytest.raises(UnsupportedVariantError, match="only supports 'klondike'"):
+        DummySolver().suggest(view)
 
 
 class RecordingProvider:

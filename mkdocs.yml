@@ -111,6 +111,7 @@ nav:
           - Solvers:
               - Solvers package: reference/api/solvers/index.md
               - Solver base: reference/api/solvers/base.md
+              - Dummy solver: reference/api/solvers/dummy.md
           - Engine: reference/api/engine.md
           - Exceptions: reference/api/exceptions.md
           - Game: reference/api/game.md

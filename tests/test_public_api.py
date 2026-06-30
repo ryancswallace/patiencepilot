@@ -18,6 +18,7 @@ def test_public_api_exports_expected_names() -> None:
         "DEFAULT_VARIANT_REGISTRY",
         "DrawFromStock",
         "DrewStockCards",
+        "DummySolver",
         "GameState",
         "GameSession",
         "InvalidMoveError",
@@ -93,6 +94,7 @@ def test_public_api_exports_expected_names() -> None:
         "validate_state_text",
         "variant_names",
         "variant_options_from_state",
+        "visible_klondike_moves",
     }
 
     assert set(patiencepilot.__all__) == expected_exports

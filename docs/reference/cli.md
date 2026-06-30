@@ -10,36 +10,46 @@ The first CLI is intentionally small and file oriented. It uses saved session
 JSON for persistence and canonical state notation for entering a visible or
 reconstructed game state.
 
+The long command is `patiencepilot-cli`; the shorter equivalent alias is
+`patp-cli`.
+
 Deal and save a reproducible game:
 
 ```bash
-patiencepilot new --seed 7 --draw-count 3 --save game.json
+patiencepilot-cli new --seed 7 --draw-count 3 --save game.json
 ```
 
 List legal move IDs from a saved session:
 
 ```bash
-patiencepilot moves --load game.json
+patiencepilot-cli moves --load game.json
 ```
 
 Apply a move and update the saved session:
 
 ```bash
-patiencepilot apply --load game.json --save game.json DRAW
+patiencepilot-cli apply --load game.json --save game.json DRAW
 ```
 
 Undo the latest saved move:
 
 ```bash
-patiencepilot undo --load game.json --save game.json
+patiencepilot-cli undo --load game.json --save game.json
 ```
 
 Read canonical state notation from a file or standard input:
 
 ```bash
-patiencepilot validate --state state.txt
-patiencepilot moves --state -
+patiencepilot-cli validate --state state.txt
+patiencepilot-cli moves --state -
 ```
 
-An `advice` command is present at the UI boundary. It accepts search limits and
-delegates to the configured advice provider once one is available.
+Ask the built-in dummy solver for the next move:
+
+```bash
+patiencepilot-cli advice --load game.json
+```
+
+The dummy solver is deterministic and recommends the first listed legal move.
+The command accepts search-limit flags so future solvers can reuse the same
+interface.

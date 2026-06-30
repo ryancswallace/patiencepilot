@@ -40,7 +40,9 @@ def test_cli_packaging_declares_script_and_optional_ui_extras() -> None:
     config = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
     project = config["project"]
 
-    assert project["scripts"]["patiencepilot"] == "patiencepilot.cli:main"
+    assert project["scripts"]["patiencepilot-cli"] == "patiencepilot.cli:main"
+    assert project["scripts"]["patp-cli"] == "patiencepilot.cli:main"
+    assert "patiencepilot" not in project["scripts"]
     assert project["optional-dependencies"]["cli"] == []
     assert project["optional-dependencies"]["webui"] == []
 
@@ -196,26 +198,26 @@ def test_cli_reports_command_errors(argv: list[str], message: str) -> None:
 def test_cli_advice_command_is_wired_to_provider_boundary(tmp_path: Path) -> None:
     save_path = tmp_path / "game.json"
     run(["new", "--seed", "12", "--save", str(save_path)])
-    stderr = StringIO()
+    stdout = StringIO()
 
-    code = run(["advice", "--load", str(save_path), "--depth-limit", "1"], stderr=stderr)
+    code = run(["advice", "--load", str(save_path), "--depth-limit", "1"], stdout=stdout)
 
-    assert code == 2
-    assert "no advice provider configured" in stderr.getvalue()
+    assert code == 0
+    assert stdout.getvalue() == "Advice:\n1. DRAW\n"
 
 
 def test_cli_advice_accepts_all_search_limit_options(tmp_path: Path) -> None:
     save_path = tmp_path / "game.json"
     run(["new", "--seed", "12", "--save", str(save_path)])
-    stderr = StringIO()
+    stdout = StringIO()
 
     code = run(
         ["advice", "--load", str(save_path), "--time-limit", "0.1", "--node-limit", "10", "--depth-limit", "2"],
-        stderr=stderr,
+        stdout=stdout,
     )
 
-    assert code == 2
-    assert "no advice provider configured" in stderr.getvalue()
+    assert code == 0
+    assert stdout.getvalue() == "Advice:\n1. DRAW\n"
 
 
 def test_cli_rejects_non_object_session_json(tmp_path: Path) -> None:

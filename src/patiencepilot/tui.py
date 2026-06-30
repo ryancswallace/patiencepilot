@@ -11,7 +11,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         from .ui.tui import main as tui_main
     except ModuleNotFoundError as error:
         if error.name == "textual":
-            print("patiencepilot-tui requires Textual. Install with: patiencepilot[tui]")
+            print("patiencepilot-tui and patp-tui require Textual. Install with: patiencepilot[tui]")
             return 2
         raise
     return tui_main(argv)

@@ -52,8 +52,10 @@ tui = [
 webui = []
 
 [project.scripts]
-patiencepilot = "patiencepilot.cli:main"
+patiencepilot-cli = "patiencepilot.cli:main"
 patiencepilot-tui = "patiencepilot.tui:main"
+patp-cli = "patiencepilot.cli:main"
+patp-tui = "patiencepilot.tui:main"
 
 [project.urls]
 Homepage = "https://github.com/ryancswallace/patiencepilot"
