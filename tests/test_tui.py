@@ -54,7 +54,7 @@ def test_tui_packaging_declares_script_and_optional_extra() -> None:
 
     assert project["scripts"]["patiencepilot-tui"] == "patiencepilot.tui:main"
     assert project["scripts"]["patp-tui"] == "patiencepilot.tui:main"
-    assert project["optional-dependencies"]["tui"] == ["textual>=6.12,<7"]
+    assert project["optional-dependencies"]["tui"] == ["textual>=6.12,<9"]
 
 
 def test_tui_entry_point_delegates_to_textual_app(monkeypatch: pytest.MonkeyPatch) -> None:
