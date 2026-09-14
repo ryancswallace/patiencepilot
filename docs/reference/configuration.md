@@ -171,6 +171,9 @@ Build and run the test image locally with:
 make docker-test
 ```
 
+The test image installs the `test` and `release` dependency groups required by
+the test suite.
+
 Run all local Docker checks with:
 
 ```bash

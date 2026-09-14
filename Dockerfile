@@ -50,7 +50,7 @@ FROM builder AS test
 COPY . .
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked \
+    uv sync --locked --no-default-groups --group test --group release \
     && chown -R patiencepilot:patiencepilot /app
 
 USER patiencepilot
